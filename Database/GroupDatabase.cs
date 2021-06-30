@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace StudentGroupDatabase.Database
 {
-    public class GroupDatabase:DbContext
+    public class GroupDatabase : DbContext
     {
-        public GroupDatabase (DbContextOptions<GroupDatabase> context) : base(context) { }
+        public GroupDatabase(DbContextOptions<GroupDatabase> context) : base(context) { }
         public DbSet<Student> Students { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<StudentGroup> StudentGroups { get; set; }

@@ -11,55 +11,54 @@ namespace StudentGroupDatabase.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class StudentGroupController : ControllerBase
+    public class StudentController : ControllerBase
     {
         private readonly GroupDatabase _context;
-        public StudentGroupController(GroupDatabase context)
+        public StudentController (GroupDatabase context)
         {
             _context = context;
         }
         [Route("GetAll")]
-        [HttpGet]
         public IActionResult GetAll()
         {
-            var data = _context.StudentGroups.ToList();
-            return Ok (data);
+            var data = _context.Students.ToList();
+            return Ok(data);
         }
         [HttpPost]
-        public IActionResult Create(StudentGroupVm viewModel)
+        public IActionResult Create (StudentVm viewModel)
         {
-            var data = new StudentGroup();
-            data.StudentID = viewModel.StudentID;
-            data.GroupID = viewModel.GroupID;
-            _context.StudentGroups.Add(data);
+            var data = new Student();
+            data.Name = viewModel.Name;
+            data.Surname = viewModel.Surname;
+            _context.Students.Add(data);
             _context.SaveChanges();
             return Ok("Created");
         }
         [HttpPut]
-        public IActionResult Update(StudentGroup model)
+        public IActionResult Update(Student model)
         {
-            var data = _context.StudentGroups.AsNoTracking().FirstOrDefault(x => x.ID == model.ID);
+            var data = _context.Students.AsNoTracking().FirstOrDefault(x => x.ID == model.ID);
             if (data == null)
                 return BadRequest("Bu id-li telebe yoxdur");
             _context.Entry(model).State = EntityState.Modified;
             _context.SaveChanges();
-            return Ok("Updated");
+            return Ok("Update");
         }
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var data = _context.StudentGroups.AsNoTracking().FirstOrDefault(x => x.ID == id);
+            var data = _context.Students.AsNoTracking().FirstOrDefault(x => x.ID == id);
             if (data == null)
                 return BadRequest("Bu id-li telebe yoxdur");
             _context.Entry(data).State = EntityState.Deleted;
             _context.SaveChanges();
             return Ok("Deleted");
         }
-        [Route("id")]
+        [Route ("id")]
         [HttpGet]
-        public IActionResult GetbyID(int id)
+        public IActionResult GetById(int id)
         {
-            var data = _context.StudentGroups.AsNoTracking().FirstOrDefault(x => x.ID == id);
+            var data = _context.Students.AsNoTracking().FirstOrDefault(x => x.ID == id);
             if (data == null)
                 return BadRequest("Bu id-li telebe yoxdur");
             return Ok(data);

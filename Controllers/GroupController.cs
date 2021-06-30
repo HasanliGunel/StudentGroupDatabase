@@ -2,19 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using StudentGroupDatabase.Database;
 using StudentGroupDatabase.Model;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace StudentGroupDatabase.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class StudentGroupController : ControllerBase
+    public class GroupController : ControllerBase
     {
         private readonly GroupDatabase _context;
-        public StudentGroupController(GroupDatabase context)
+        public GroupController(GroupDatabase context)
         {
             _context = context;
         }
@@ -22,47 +19,54 @@ namespace StudentGroupDatabase.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var data = _context.StudentGroups.ToList();
-            return Ok (data);
+            var data = _context.Groups.ToList();
+            return Ok(data);
         }
+
+        [Route("Create")]
         [HttpPost]
-        public IActionResult Create(StudentGroupVm viewModel)
+        public IActionResult Create(GroupVm viewModel)
         {
-            var data = new StudentGroup();
-            data.StudentID = viewModel.StudentID;
-            data.GroupID = viewModel.GroupID;
-            _context.StudentGroups.Add(data);
+            var data = new Group();
+            data.Name = viewModel.Name;
+            _context.Groups.Add(data);
             _context.SaveChanges();
             return Ok("Created");
         }
+
+        [Route("Update")]
         [HttpPut]
-        public IActionResult Update(StudentGroup model)
+        public IActionResult Update(Group model)
         {
-            var data = _context.StudentGroups.AsNoTracking().FirstOrDefault(x => x.ID == model.ID);
+            var data = _context.Groups.AsNoTracking().FirstOrDefault(x => x.ID == model.ID);
             if (data == null)
                 return BadRequest("Bu id-li telebe yoxdur");
             _context.Entry(model).State = EntityState.Modified;
             _context.SaveChanges();
-            return Ok("Updated");
+            return Ok("Update");
         }
+
+        [Route("Delete")]
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var data = _context.StudentGroups.AsNoTracking().FirstOrDefault(x => x.ID == id);
+            var data = _context.Groups.AsNoTracking().FirstOrDefault(x => x.ID == id);
             if (data == null)
-                return BadRequest("Bu id-li telebe yoxdur");
+                return BadRequest("bu id-li telebe yoxdur");
             _context.Entry(data).State = EntityState.Deleted;
             _context.SaveChanges();
             return Ok("Deleted");
         }
+
         [Route("id")]
         [HttpGet]
-        public IActionResult GetbyID(int id)
+        public IActionResult GetbyGroutId(int id)
         {
-            var data = _context.StudentGroups.AsNoTracking().FirstOrDefault(x => x.ID == id);
+            var data = _context.Groups.AsNoTracking().FirstOrDefault(x => x.ID == id);
             if (data == null)
                 return BadRequest("Bu id-li telebe yoxdur");
             return Ok(data);
+
         }
     }
 }
